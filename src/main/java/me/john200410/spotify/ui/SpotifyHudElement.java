@@ -1,5 +1,6 @@
 package me.john200410.spotify.ui;
 
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -81,6 +82,7 @@ public class SpotifyHudElement extends ResizeableHudElement {
 	private final BooleanSetting background = new BooleanSetting("Background", true);
 	private final ColorSetting backgroundColor = new ColorSetting("Color", new Color(BACKGROUND_COLOR, true));
 	private final NumberSetting<Double> updateDelay = new NumberSetting<>("UpdateDelay", 0.5d, 0.25d, 2d);
+    private final BooleanSetting messageChat = new BooleanSetting("Chat Announcement", false);
 	
 	private final BooleanSetting binds = new BooleanSetting("Binds", false);
 	private final BindSetting playPauseBind = new BindSetting("Play/Pause", NullKey.INSTANCE);
@@ -130,11 +132,17 @@ public class SpotifyHudElement extends ResizeableHudElement {
 				this.authenticateButton.setValue(true);
 			}
 		});
+
+        this.messageChat.onChange((c) -> {
+
+        });
+
+
 		
 		this.background.addSubSettings(backgroundColor);
 		this.binds.addSubSettings(playPauseBind, backBind, nextBind, back5Bind, next5Bind);
 		
-		this.registerSettings(authenticateButton, background, updateDelay, binds);
+		this.registerSettings(authenticateButton, messageChat,background, updateDelay, binds);
 		
 		//dont ask
 		//this.setupDummyModuleBecauseImFuckingStupidAndForgotToRegisterHudElementsIntoTheEventBus();
@@ -540,6 +548,9 @@ public class SpotifyHudElement extends ResizeableHudElement {
 			
 			this.artists.setText("by " + Strings.join(artists, ", "));
 			this.album.setText("on " + song.album.name);
+            if (messageChat.getValue() == true) {
+                mc.player.connection.sendChat(">Now playing " + song.name + " " + this.artists.text + " " + this.album.text);
+            }
 		}
 		
 		static class ScrollingText {
