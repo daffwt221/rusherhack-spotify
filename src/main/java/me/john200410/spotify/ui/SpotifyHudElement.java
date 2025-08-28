@@ -133,12 +133,6 @@ public class SpotifyHudElement extends ResizeableHudElement {
 			}
 		});
 
-        this.messageChat.onChange((c) -> {
-
-        });
-
-
-		
 		this.background.addSubSettings(backgroundColor);
 		this.binds.addSubSettings(playPauseBind, backBind, nextBind, back5Bind, next5Bind);
 		
