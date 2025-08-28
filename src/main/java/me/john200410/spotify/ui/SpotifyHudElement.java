@@ -83,6 +83,7 @@ public class SpotifyHudElement extends ResizeableHudElement {
 	private final ColorSetting backgroundColor = new ColorSetting("Color", new Color(BACKGROUND_COLOR, true));
 	private final NumberSetting<Double> updateDelay = new NumberSetting<>("UpdateDelay", 0.5d, 0.25d, 2d);
     private final BooleanSetting messageChat = new BooleanSetting("Chat Announcement", false);
+    private final BooleanSetting messageChatClientSide = new BooleanSetting("Client-Side", true);
 	
 	private final BooleanSetting binds = new BooleanSetting("Binds", false);
 	private final BindSetting playPauseBind = new BindSetting("Play/Pause", NullKey.INSTANCE);
@@ -132,6 +133,8 @@ public class SpotifyHudElement extends ResizeableHudElement {
 				this.authenticateButton.setValue(true);
 			}
 		});
+
+        this.messageChat.addSubSettings(messageChatClientSide);
 
 		this.background.addSubSettings(backgroundColor);
 		this.binds.addSubSettings(playPauseBind, backBind, nextBind, back5Bind, next5Bind);
@@ -543,9 +546,13 @@ public class SpotifyHudElement extends ResizeableHudElement {
 			this.artists.setText("by " + Strings.join(artists, ", "));
 			this.album.setText("on " + song.album.name);
             if (messageChat.getValue() == true) {
-                mc.player.connection.sendChat(">Now playing " + song.name + " " + this.artists.text + " " + this.album.text);
+                if (messageChatClientSide.getValue() == true) {
+                    ChatUtils.print("Now playing " + song.name + " " + this.artists.text + " " + this.album.text + ".");
+                } else {
+                    mc.player.connection.sendChat(">Now playing " + song.name + " " + this.artists.text + " " + this.album.text + ".");
+                }
             }
-		}
+        }
 		
 		static class ScrollingText {
 			
