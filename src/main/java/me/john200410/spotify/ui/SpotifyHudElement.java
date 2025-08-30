@@ -1,6 +1,5 @@
 package me.john200410.spotify.ui;
 
-import net.minecraft.client.multiplayer.ClientPacketListener;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
